@@ -1,14 +1,14 @@
 import 'package:chuva_dart/controllers/activity_controller.dart';
 import 'package:chuva_dart/models/activity_model.dart';
 import 'package:chuva_dart/pages/activity/activity_presenter.dart';
-import 'package:chuva_dart/pages/home/home_controller.dart';
+import 'package:chuva_dart/controllers/formatters_controller.dart';
 import 'package:flutter/material.dart';
 
 class CardWidget extends StatelessWidget {
-  final HomeController homeController;
+  final FormattersController formattersController;
   final ActivityController activityController;
   final ActivityModel activity;
-  const CardWidget({super.key, required this.homeController, required this.activity, required this.activityController});
+  const CardWidget({super.key, required this.activity, required this.activityController, required this.formattersController});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class CardWidget extends StatelessWidget {
                   width: 5,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
-                    color: activity.color != '' ? activityController.getFromCssColor(activity.color) : Colors.transparent,
+                    color: activity.color != null ? activityController.getFromCssColor(activity.color!) : Colors.transparent,
                   ),
                 ),
                 Flexible(
@@ -51,9 +51,7 @@ class CardWidget extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              homeController.formaterDateOfActivity(activity.type, activity.dateStarted, activity.dateEnd),
-                            ),
+                            Text(formattersController.formaterDateOfActivity(activity.type, activity.dateStarted, activity.dateEnd)),
                             Visibility(
                               visible: activity.isScheduled,
                               child: const Icon(
@@ -72,7 +70,7 @@ class CardWidget extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          homeController.formatterPeoples(activity.peoples),
+                          formattersController.formatterPeoples(activity.peoples),
                           style: const TextStyle(
                             color: Color(0XFF959595),
                           ),

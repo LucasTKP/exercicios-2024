@@ -35,6 +35,7 @@ class _ActivityPresenterState extends State<ActivityPresenter> {
           activity: activityController.activities[indexActivity],
           activityController: activityController,
           activityPageController: activityPageController,
+          formattersController: Dependencies.instance.get(),
         );
       },
     );

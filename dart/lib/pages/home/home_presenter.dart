@@ -28,7 +28,11 @@ class _HomePresenterState extends State<HomePresenter> {
     return AnimatedBuilder(
       animation: activityController,
       builder: (_, __) {
-        return HomePage(homeController: homeController, activityController: activityController);
+        return HomePage(
+          homeController: homeController,
+          activityController: activityController,
+          formattersController: Dependencies.instance.get(),
+        );
       },
     );
   }

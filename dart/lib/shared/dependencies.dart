@@ -1,4 +1,5 @@
 import 'package:chuva_dart/controllers/activity_controller.dart';
+import 'package:chuva_dart/controllers/formatters_controller.dart';
 import 'package:chuva_dart/services/dio_service_imp.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,8 @@ class Dependencies {
 }
 
 Future<bool> setupDependencies(BuildContext context) async {
+  Dependencies.instance.clear();
   Dependencies.instance.add<ActivityController>(ActivityController(dio: DioServiceImp()));
+  Dependencies.instance.add<FormattersController>(FormattersController());
   return true;
 }

@@ -71,4 +71,6 @@ class ActivityController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
 }

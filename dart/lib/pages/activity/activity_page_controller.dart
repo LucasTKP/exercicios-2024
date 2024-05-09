@@ -1,4 +1,5 @@
 import 'package:chuva_dart/controllers/activity_controller.dart';
+import 'package:chuva_dart/models/activity_model.dart';
 import 'package:flutter/material.dart';
 
 class ActivityPageController extends ChangeNotifier {
@@ -9,7 +10,6 @@ class ActivityPageController extends ChangeNotifier {
 
   bool isLoading = false;
 
-
   @override
   void dispose() {
     super.dispose();
@@ -17,8 +17,8 @@ class ActivityPageController extends ChangeNotifier {
   }
 
   String formaterDateOfActivity(DateTime dateStart, DateTime dateEnd) {
-    String hourStart = '${dateStart.hour}:${dateStart.minute.toString().padLeft(2, '0')}h';
-    String hourEnd = '${dateEnd.hour}:${dateEnd.minute.toString().padLeft(2, '0')}h';
+    String hourStart = '${dateStart.hour.toString().padLeft(2, '0')}:${dateStart.minute.toString().padLeft(2, '0')}h';
+    String hourEnd = '${dateEnd.hour.toString().padLeft(2, '0')}:${dateEnd.minute.toString().padLeft(2, '0')}h';
 
     return '${getNameDayOfWeek(dateStart)} $hourStart - $hourEnd';
   }
@@ -58,8 +58,34 @@ class ActivityPageController extends ChangeNotifier {
     return newDescription;
   }
 
-  setIsLoading(bool value){
+  handleChangeScheduled(ActivityModel activity, Function(String) showMessage) async {
+    setIsLoading(true);
+    await Future.delayed(const Duration(seconds: 1));
+    activityController.changeScheduled(activity.id);
+    setIsLoading(false);
+    if (activity.isScheduled) {
+      showMessage('Não vamos mias te lembrar desta atividade!');
+    } else {
+      showMessage('Vamos te lembrar desta atividade!');
+    }
+  }
+
+  setIsLoading(bool value) {
     isLoading = value;
     notifyListeners();
+  }
+
+  List<ActivityModel> getSubActivities(ActivityModel activity) {
+    List<ActivityModel> subActivities = activityController.activities.where((element) => element.parent == activity.id).toList();
+    return subActivities;
+  }
+
+  String? getParentActivity(ActivityModel activity) {
+    try {
+      ActivityModel activityParent = activityController.activities.firstWhere((element) => element.id == activity.parent);
+      return activityParent.title;
+    } catch (e) {
+      return null;
+    }
   }
 }
